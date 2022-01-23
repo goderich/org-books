@@ -295,9 +295,10 @@ Assumes it has one."
 Return a list of three items: title (string), author (string) and
 an alist of properties to be applied to the org entry. If the url
 is not supported, throw an error."
-  (let ((output 'no-match))
+  (let ((output 'no-match)
+        (url-host-string (url-host (url-generic-parse-url url))))
     (cl-dolist (pattern-fn-pair org-books-url-pattern-dispatches)
-      (when (s-matches? (car pattern-fn-pair) url)
+      (when (s-matches? (car pattern-fn-pair) url-host-string)
         (setq output (funcall (cdr pattern-fn-pair) url))
         (cl-return)))
     (if (eq output 'no-match)
